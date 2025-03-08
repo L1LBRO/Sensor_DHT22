@@ -54,8 +54,8 @@
 
   Clona el repositorio y ejecuta el script en tu Raspberry Pi:
 
-    git clone https://github.com/tu_usuario/tu_repositorio.git
-    cd tu_repositorio
+    git clone https://github.com/L1LBRO/Sensor_DHT22.git
+    cd Sensor_DHT22
     python3 script.py
 
   # Uso
