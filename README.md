@@ -2,15 +2,18 @@
 
   Este repositorio contiene un script en Python que permite leer datos de un sensor DHT22 conectado a una Raspberry Pi, almacenar los datos en una base de datos MariaDB, enviar la información a un servidor OPC UA y finalmente mostrar los valores en una pantalla LCD.
 
-# Características del Script
+## Características del Script
 
-  Servidor OPC UA: 
+  ### Servidor OPC UA: 
+  
   Se conecta a un servidor OPC UA para actualizar los valores de temperatura y humedad.
 
-  Base de datos MariaDB: 
+  ### Base de datos MariaDB: 
+  
   Se conecta a una base de datos previamente creada para almacenar los valores.
 
-  Almacenamiento de datos: 
+  ### Almacenamiento de datos: 
+  
   Guarda las lecturas en una tabla con los siguientes campos:
 
     id (autoincremental)
@@ -18,18 +21,19 @@
     humedad
     fecha_lectura (timestamp)
 
-  Pantalla LCD: 
+  ### Pantalla LCD: 
+  
   Muestra la temperatura y la humedad en una pantalla LCD conectada a la Raspberry Pi.
 
-  # Requisitos
+  ## Requisitos
 
-  Hardware
+  ### Hardware
 
     Raspberry Pi con conexión a internet
     Sensor DHT22
     Pantalla LCD con interfaz I2C
     
-  Software y dependencias
+  ### Software y dependencias
 
     Python 3
     Opcua para la comunicación OPC UA
@@ -37,7 +41,7 @@
     Adafruit_dht para la lectura del sensor DHT22 (Pueden surgir problemas de compatibilidad por lo que lo más recomendable es descargarlo desde su repositorio oficial https://github.com/adafruit/DHT-sensor-library.git)
     RPLCD para la pantalla LCD
 
-  # Configuración de la Base de Datos
+  ## Configuración de la Base de Datos
 
   Antes de ejecutar el script, asegúrate de tener creada una base de datos en MariaDB con la siguiente estructura:
 
@@ -50,24 +54,24 @@
       fecha_lectura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
-  # Ejecución del Script
+  ## Ejecución del Script
 
-  Clona el repositorio y ejecuta el script en tu Raspberry Pi:
+   Clona el repositorio y ejecuta el script en tu Raspberry Pi:
 
     git clone https://github.com/L1LBRO/Sensor_DHT22.git
     cd Sensor_DHT22
     python3 LecturaSensor_EnvioPantalla.py
 
-  # Uso
+  ## Uso
     
   Una vez ejecutado, el script leerá la temperatura y humedad del sensor cada 5 segundos.
   Los datos se enviarán al servidor OPC UA y se almacenarán en MariaDB.
   Los valores se mostrarán en la pantalla LCD.
 
-  # Contribuciones
+  ## Contribuciones
 
   Si deseas mejorar este proyecto, siéntete libre de hacer un fork y enviar un pull request con tus mejoras.
 
-  # Licencia
+  ## Licencia
 
   Este proyecto está bajo la licencia MIT.
