@@ -6,7 +6,7 @@ import mariadb
 from RPLCD.i2c import CharLCD
 
 # Configuración del LCD
-lcd = CharLCD('PCF8574', 0x27)  # Usa 0x3F si 0x27 no funciona
+lcd = CharLCD('PCF8574', 0x27)  # Usa 0x3F si 0x27 no funciona.
 
 # Configuración del servidor OPC UA
 URL = "opc.tcp://localhost:4840/freeopcua/server/"
