@@ -56,7 +56,7 @@
 
     git clone https://github.com/L1LBRO/Sensor_DHT22.git
     cd Sensor_DHT22
-    python3 script.py
+    python3 LecturaSensor_EnvioPantalla.py
 
   # Uso
     
