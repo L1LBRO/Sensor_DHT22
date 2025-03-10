@@ -54,6 +54,8 @@
       fecha_lectura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
+  Para que el script funcione correctamente con la base de datos se deberá cambiar los datos que existen dentro del script para tener el usuario y contraseña del usuario de tu base de datos
+
   ## Ejecución del Script
 
    Clona el repositorio y ejecuta el script en tu Raspberry Pi:
