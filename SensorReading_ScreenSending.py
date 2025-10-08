@@ -5,16 +5,16 @@ import time
 import mariadb
 from RPLCD.i2c import CharLCD
 
-# Configuración del LCD
-lcd = CharLCD('PCF8574', 0x27)  # Usa 0x3F si 0x27 no funciona.
+# LCD configuration
+lcd = CharLCD('PCF8574', 0x27)  # Use 0x3F if 0x27 does not work.
 
-# Configuración del servidor OPC UA
+# OPC UA server configuration
 URL = "opc.tcp://localhost:4840/freeopcua/server/"
-# Definición de los nodos
+# Node definitions
 TEMP_NODE_ID = "ns=2;i=2"
 HUMIDITY_NODE_ID = "ns=2;i=3"
 
-# Configuración de la conexión a MariaDB
+# MariaDB connection configuration
 DB_CONFIG = {
     "host": "localhost",
     "user": "usersensor",
@@ -22,49 +22,50 @@ DB_CONFIG = {
     "database": "sensores"
 }
 
-# Inicializar el cliente OPC UA
+# Initialize OPC UA client
 client = Client(URL)
 
-# Inicializar el sensor DHT22
+# Initialize DHT22 sensor
 sensor = adafruit_dht.DHT22(board.D4)
 
 def connect_opcua():
     while True:
         try:
             client.connect()
-            print("Conectado al servidor OPC UA")
+            print("Connected to OPC UA server")
             return
         except Exception as e:
-            print(f"Error de conexión en OPC UA: {e}. Reintentando en 5 segundos...")
+            print(f"OPC UA connection error: {e}. Retrying in 5 seconds...")
             time.sleep(5)
 
 def connect_db():
     while True:
         try:
             conn = mariadb.connect(**DB_CONFIG)
-            print("Conectado a la base de datos MariaDB")
+            print("Connected to MariaDB")
             return conn
         except mariadb.Error as e:
-            print(f"Error de conexión en MariaDB: {e}. Reintentando en 5 segundos...")
+            print(f"MariaDB connection error: {e}. Retrying in 5 seconds...")
             time.sleep(5)
 
 def save_to_db(temperature, humidity, conn):
     try:
         cursor = conn.cursor()
+        # Note: table/column names kept as in DB schema (lecturas, temperatura, humedad)
         cursor.execute("INSERT INTO lecturas (temperatura, humedad) VALUES (%s, %s)", (temperature, humidity))
         conn.commit()
-        print("Datos guardados en MariaDB")
+        print("Data saved to MariaDB")
     except mariadb.Error as e:
-        print(f"Error al insertar datos en MariaDB: {e}")
+        print(f"Error inserting data into MariaDB: {e}")
 
 def update_lcd(temperature, humidity):
-    """ Escribe la temperatura y humedad en la pantalla LCD """
+    """Write temperature and humidity to the LCD display"""
     lcd.clear()
     lcd.write_string(f"Temp: {temperature:.1f}C")
     lcd.crlf()
-    lcd.write_string(f"Humedad: {humidity:.1f}%")
+    lcd.write_string(f"Humidity: {humidity:.1f}%")
 
-# Conectar a OPC UA y MariaDB
+# Connect to OPC UA and MariaDB
 connect_opcua()
 conn = connect_db()
 
@@ -74,40 +75,40 @@ humidity_node = client.get_node(HUMIDITY_NODE_ID)
 try:
     while True:
         try:
-            # Leer datos del sensor
+            # Read sensor data
             temperature = sensor.temperature
             humidity = sensor.humidity
 
             if temperature is not None and humidity is not None:
-                print(f"Temp: {temperature:.1f} C  Humedad: {humidity:.1f}%")
+                print(f"Temp: {temperature:.1f} C  Humidity: {humidity:.1f}%")
 
-                # Enviar datos a OPC UA
+                # Send data to OPC UA
                 try:
                     temperature_node.set_value(temperature)
                     humidity_node.set_value(humidity)
-                    print("Datos actualizados en el servidor OPC UA")
+                    print("Data updated on OPC UA server")
                 except Exception as e:
-                    print(f"Error al actualizar OPC UA: {e}")
+                    print(f"Error updating OPC UA: {e}")
                     client.disconnect()
                     connect_opcua()
 
-                # Guardar en MariaDB
+                # Save to MariaDB
                 save_to_db(temperature, humidity, conn)
 
-                # Actualizar la pantalla LCD
+                # Update the LCD display
                 update_lcd(temperature, humidity)
             else:
-                print("Error: valores inválidos del sensor")
+                print("Error: invalid sensor values")
 
         except RuntimeError as e:
-            print(f"Error en la lectura del sensor: {e}")
+            print(f"Sensor read error: {e}")
 
-        time.sleep(5)  # Esperar entre lecturas
+        time.sleep(5)  # Wait between readings
 
 except KeyboardInterrupt:
-    print("Deteniendo el script...")
+    print("Stopping script...")
 finally:
     sensor.exit()
     client.disconnect()
     lcd.clear()
-    print("Sensor liberado, desconectado de OPC UA y MariaDB cerrada.")
+    print("Sensor released, disconnected from OPC UA and MariaDB connection closed.")
