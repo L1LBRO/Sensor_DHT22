@@ -55,3 +55,28 @@ CREATE TABLE lecturas (
   humedad FLOAT,
   fecha_lectura TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+````
+To connect successfully, update the database credentials inside the script with your user and password.
+
+## Running the Script
+
+Clone the repository and run the script on your Raspberry Pi:
+```bash
+git clone https://github.com/L1LBRO/Sensor_DHT22.git
+cd Sensor_DHT22
+python3 LecturaSensor_EnvioPantalla.py
+````
+
+## Usage
+
+Once running, the script reads temperature and humidity every 5 seconds.
+Data is sent to the OPC UA server and stored in MariaDB.
+Values are displayed on the LCD screen.
+
+## Contributions
+
+If you want to improve this project, feel free to fork the repository and submit a pull request with your enhancements.
+
+## License
+
+This project is licensed under the MIT License.
