@@ -64,7 +64,7 @@ Clone the repository and run the script on your Raspberry Pi:
 ```bash
 git clone https://github.com/L1LBRO/Sensor_DHT22.git
 cd Sensor_DHT22
-python3 LecturaSensor_EnvioPantalla.py
+python3 SensorReading_ScreenSending.py
 ````
 
 ## Usage
